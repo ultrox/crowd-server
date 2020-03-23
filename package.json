@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Marko Vujanic",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./start.js",
+    "watch": "nodemon ./start.js --ignore public/",
+    "dev": "NODE_ENV=development npm run watch"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
