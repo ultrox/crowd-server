@@ -1,5 +1,6 @@
 require('dotenv').config({ path: 'variables.env' });
 const mongoose = require('mongoose')
+mongoose.set('useFindAndModify', false);
 
 // import all of our models
 require('./models/ShortUrlModel')
