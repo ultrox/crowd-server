@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ShortUrl = mongoose.model('ShortUrl')
+const {isUrlValid, genResponseData} = require('../helpers')
 
 /**
  * _ → Number
@@ -20,18 +21,28 @@ async function genShortCode() {
 }
 
 exports.createShortLink = async (req, res) => {
-  const shortCode = await genShortCode(req.body.orgUrl)
-  const link = new ShortUrl({
+  const orgUrl = req.body.orgUrl
+
+  if(!isUrlValid(orgUrl)) {
+    throw new Error('Link is not Valid')
+  }
+
+  const existingLink = await ShortUrl.findOne({orgUrl: req.body.orgUrl})
+  if (existingLink !== null) {
+    const oldShortCode = existingLink.shortCode
+    return res
+      .status(200)
+      .json(genResponseData(oldShortCode, existingLink._doc))
+  }
+
+  const shortCode = await genShortCode()
+  const newLink = new ShortUrl({
     shortCode,
     orgUrl: req.body.orgUrl,
   })
 
-  await link.save()
-  res.status(200).json({
-    data: {
-      shortLink: process.env.BASE_URL + `/${shortCode}`,
-    },
-  })
+  await newLink.save()
+  return res.status(200).json(genResponseData(shortCode))
 }
 
 exports.getShortLink = async (req, res) => {
