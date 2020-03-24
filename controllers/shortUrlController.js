@@ -23,7 +23,7 @@ async function genShortCode() {
 exports.createShortLink = async (req, res) => {
   const orgUrl = req.body.orgUrl
 
-  if(!isUrlValid(orgUrl)) {
+  if (!isUrlValid(orgUrl)) {
     throw new Error('Link is not Valid')
   }
 
@@ -51,5 +51,6 @@ exports.getShortLink = async (req, res) => {
     {$inc: {visited: 1}},
     {new: true},
   ).exec()
-  res.status(200).json(link)
+  const {_doc, shortCode} = link
+  res.status(200).json(genResponseData(shortCode, _doc))
 }
