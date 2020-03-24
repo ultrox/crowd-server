@@ -1,0 +1,4 @@
+variables.env
+logfile
+.env
+node_modules/
