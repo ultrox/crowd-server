@@ -6,7 +6,10 @@ const shortUrl = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  shortCode: String,
+  shortCode: {
+    default: 0,
+    type: Number
+  },
   orgUrl: String,
   created: {
     type: Date,
