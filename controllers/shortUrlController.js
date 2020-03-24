@@ -2,17 +2,25 @@ const mongoose = require('mongoose')
 const ShortUrl = mongoose.model('ShortUrl')
 
 /**
- * String → String
+ * _ → Number
  * short code for specific url to save to db
+ * NOTE: code is generated +1 to the last created from database
+ *       not secure, but easy
  */
-// TODO genShortCode
-function genShortCode(url) {
-  return "google"
+
+async function genShortCode() {
+  const lastLink = await ShortUrl.findOne()
+    .sort({field: 'asc', _id: -1})
+    .limit(1)
+
+  if (lastLink === null) {
+    return 1
+  }
+  return lastLink.shortCode + 1
 }
 
 exports.createShortLink = async (req, res) => {
-  const BASE_URL = 'http://crowd.com/'
-  const shortCode = genShortCode(req.body.orgUrl)
+  const shortCode = await genShortCode(req.body.orgUrl)
   const link = new ShortUrl({
     shortCode,
     orgUrl: req.body.orgUrl,
@@ -21,7 +29,7 @@ exports.createShortLink = async (req, res) => {
   await link.save()
   res.status(200).json({
     data: {
-      shortLink: BASE_URL + `${shortCode}`,
+      shortLink: process.env.BASE_URL + `/${shortCode}`,
     },
   })
 }
