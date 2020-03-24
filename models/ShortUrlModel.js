@@ -2,7 +2,10 @@ const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 
 const shortUrl = new mongoose.Schema({
-  visited: Number,
+  visited: {
+    type: Number,
+    default: 0
+  },
   shortCode: String,
   orgUrl: String,
   created: {
