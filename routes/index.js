@@ -8,7 +8,7 @@ const {
 const {catchErrors} = require('../handlers/errorHandlers')
 
 router.get('/', (req, res) => {
-  res.json({name: 'supercool app', version: 0.1})
+  res.json({name: 'supercool app', version: 0.2})
 })
 
 // catchErrors are only needed for async/await
