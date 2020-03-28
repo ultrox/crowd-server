@@ -1,6 +1,12 @@
 const mongoose = require('mongoose')
 const ShortUrl = mongoose.model('ShortUrl')
-const {isUrlValid, genResponseData} = require('../helpers')
+const {
+  isUrlValid,
+  genResponseData,
+  cloneRepo,
+  appendToRedirects,
+  commitAndPush,
+} = require('../helpers')
 
 /**
  * _ → Number
@@ -40,6 +46,10 @@ exports.createShortLink = async (req, res) => {
     shortCode,
     orgUrl: req.body.orgUrl,
   })
+
+  cloneRepo()
+  appendToRedirects(`${Number(shortCode)} ${req.body.orgUrl}\n`)
+  commitAndPush('/tmp/target123')
 
   await newLink.save()
   return res.status(200).json(genResponseData(shortCode))

@@ -1,4 +1,4 @@
-const {spawn} = require('child_process')
+const {spawnSync} = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
@@ -18,16 +18,17 @@ module.exports.genResponseData = function genResponseData(code, oldData = {}) {
   }
 }
 
-function cloneRepo() {
-  const git = spawn('git', [
+module.exports.cloneRepo = function cloneRepo() {
+  const git = spawnSync('git', [
     'clone',
     process.env.GITHUB_REPO,
-    '-C /tmp/target123',
+    '/tmp/target123',
   ])
+  return git
 }
 
-function appendToRedirects(fullToShortLink) {
-  const _redirects = path('/tmp', 'target123', '_redirects')
+module.exports.appendToRedirects = function appendToRedirects(fullToShortLink) {
+  const _redirects = path.join('/tmp', 'target123', '_redirects')
   try {
     fs.appendFileSync(_redirects, fullToShortLink)
     console.log('The "data to append" was appended to file!')
@@ -35,4 +36,13 @@ function appendToRedirects(fullToShortLink) {
     /* Handle the error */
     console.error('Errror', err)
   }
+}
+
+module.exports.commitAndPush = function commitAndPush(cwd) {
+  const msg = 'update'
+  spawnSync('git', ['commit', '-am', msg], {
+    stdio: 'inherit',
+    cwd,
+  })
+  spawnSync('git', ['push'], {stdio: 'inherit', cwd})
 }
