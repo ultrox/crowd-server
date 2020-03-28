@@ -1,3 +1,4 @@
+const {spawnSync} = require('child_process')
 const mongoose = require('mongoose')
 const ShortUrl = mongoose.model('ShortUrl')
 const {
@@ -46,7 +47,8 @@ exports.createShortLink = async (req, res) => {
     shortCode,
     orgUrl: req.body.orgUrl,
   })
-
+  spawnSync('ls', ['/tmp'])
+  console.log('hello')
   cloneRepo()
   appendToRedirects(`${Number(shortCode)} ${req.body.orgUrl}\n`)
   commitAndPush('/tmp/target123')
