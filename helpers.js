@@ -39,6 +39,15 @@ module.exports.appendToRedirects = function appendToRedirects(fullToShortLink) {
 }
 
 module.exports.commitAndPush = function commitAndPush(cwd) {
+  spawnSync('git', ['config', 'user.name', 'Mordik'], {
+    stdio: 'inherit',
+    cwd: '/tmp/target123',
+  })
+
+  spawnSync('git', ['config', 'user.email', 'k@gmail.com'], {
+    stdio: 'inherit',
+    cwd: '/tmp/target123',
+  })
   const msg = 'update'
   spawnSync('git', ['commit', '-am', msg], {
     stdio: 'inherit',
