@@ -4,11 +4,10 @@ mongoose.Promise = global.Promise
 const shortUrl = new mongoose.Schema({
   visited: {
     type: Number,
-    default: 0
+    default: 0,
   },
   shortCode: {
-    default: 0,
-    type: Number
+    type: String,
   },
   orgUrl: String,
   created: {
@@ -17,4 +16,4 @@ const shortUrl = new mongoose.Schema({
   },
 })
 
-module.exports = mongoose.model('ShortUrl', shortUrl);
+module.exports = mongoose.model('ShortUrl', shortUrl)

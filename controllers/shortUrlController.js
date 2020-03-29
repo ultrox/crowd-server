@@ -17,18 +17,12 @@ const {
  */
 
 async function genShortCode() {
-  const lastLink = await ShortUrl.findOne()
-    .sort({field: 'asc', _id: -1})
-    .limit(1)
-
-  if (lastLink === null) {
-    return 1
-  }
-  return lastLink.shortCode + 1
+  return Date.now().toString(32)
 }
 
 exports.createShortLink = async (req, res) => {
   const orgUrl = req.body.orgUrl
+  const clientCustomCode = req.body.customCode
 
   if (!isUrlValid(orgUrl)) {
     throw new Error('Link is not Valid')
@@ -42,7 +36,7 @@ exports.createShortLink = async (req, res) => {
       .json(genResponseData(oldShortCode, existingLink._doc))
   }
 
-  const shortCode = await genShortCode()
+  const shortCode = clientCustomCode || (await genShortCode())
   const newLink = new ShortUrl({
     shortCode,
     orgUrl: req.body.orgUrl,
@@ -50,7 +44,7 @@ exports.createShortLink = async (req, res) => {
   spawnSync('ls', ['/tmp'])
   console.log('hello')
   cloneRepo()
-  appendToRedirects(`${Number(shortCode)} ${req.body.orgUrl}\n`)
+  appendToRedirects(`${shortCode} ${req.body.orgUrl}\n`)
   commitAndPush('/tmp/target123')
 
   await newLink.save()
