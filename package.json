@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node ./start.js",
     "watch": "nodemon ./start.js --ignore public/",
-    "dev": "NODE_ENV=development npm run watch"
+    "dev": "NODE_ENV=development npm run watch",
+    "deploy": "git push heroku master"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
