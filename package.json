@@ -5,6 +5,7 @@
   "author": "Marko Vujanic",
   "license": "MIT",
   "scripts": {
+    "test": "jest --watch",
     "start": "node ./start.js",
     "watch": "nodemon ./start.js --ignore public/",
     "dev": "NODE_ENV=development npm run watch",
@@ -16,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jest": "^25.3.0",
     "mongoose": "5.6.11"
   },
   "devDependencies": {
