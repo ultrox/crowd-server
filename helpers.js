@@ -38,6 +38,21 @@ module.exports.appendToRedirects = function appendToRedirects(fullToShortLink) {
   }
 }
 
+module.exports.convertToText = function convertToText(arr) {
+  let str = ''
+  arr.forEach(item => (str += `${item.shortCode} ${item.orgUrl}\n`))
+  return str
+}
+
+module.exports.writeToRedirects = function writeToRedirects(content) {
+  const _redirectsFile = path.join('/tmp', 'target123', '_redirects')
+  try {
+    fs.writeFileSync(_redirectsFile, content, 'utf8')
+  } catch (err) {
+    /* Handle the error */
+    console.error('Errror', err)
+  }
+}
 module.exports.commitAndPush = function commitAndPush(cwd) {
   spawnSync('git', ['config', 'user.name', 'Mordik'], {
     stdio: 'inherit',

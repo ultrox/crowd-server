@@ -5,7 +5,8 @@ const {
   isUrlValid,
   genResponseData,
   cloneRepo,
-  appendToRedirects,
+  writeToRedirects,
+  convertToText,
   commitAndPush,
 } = require('../helpers')
 
@@ -37,14 +38,17 @@ exports.createShortLink = async (req, res) => {
   }
 
   const shortCode = clientCustomCode || (await genShortCode())
-  const newLink = new ShortUrl({
-    shortCode,
-    orgUrl: req.body.orgUrl,
-  })
-  spawnSync('ls', ['/tmp'])
-  console.log('hello')
+  const dataForNewLink = {shortCode, orgUrl: req.body.orgUrl}
+  const newLink = new ShortUrl(dataForNewLink)
+
+  // sync all from db to file
+  const allShortLinks = await ShortUrl.find({})
+  let thing = allShortLinks.map(({shortCode, orgUrl}) => ({shortCode, orgUrl}))
+  thing.push(dataForNewLink)
+  let txtLinks = convertToText(thing)
+
   cloneRepo()
-  appendToRedirects(`${shortCode} ${req.body.orgUrl}\n`)
+  writeToRedirects(txtLinks)
   commitAndPush('/tmp/target123')
 
   await newLink.save()
